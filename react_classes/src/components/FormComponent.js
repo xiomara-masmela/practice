@@ -9,7 +9,7 @@ class FormComponent extends Component {
         super(props);
         this.state = {
             information: {
-                value: '',
+                value: [],
                 type: props.type,
                 placeholder: props.placeholder,
             }
@@ -19,11 +19,12 @@ class FormComponent extends Component {
 
     handleChangeName(event){
         console.log("name", event.target.value);
-        this.setState({information: {value: event.target.value}});
+        const value = event.target.value;
+        this.setState({information: {value: [...value]}});
 
     }
     handleChangeLastName(event){
-        this.setState({information: {value: event.target.value}});
+        this.setState({information: [...event.target.value]});
 
     }
 
@@ -33,7 +34,7 @@ class FormComponent extends Component {
     }
 
     handleChangePassword(event){
-        this.setState({information: {value: event.target.value}});
+        this.setState({information: [...event.target.value]});
 
     }
 
@@ -57,7 +58,7 @@ class FormComponent extends Component {
                 type="text" 
                 placeholder="Last Name"  
                 value={value}
-                onChangeValue={this.handleChangeLastNname}/>
+                onChangeValue={this.handleChangeLastName}/>
             <Field className="mb-4" 
                 type="email" 
                 placeholder="Email" 
