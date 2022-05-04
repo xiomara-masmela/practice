@@ -15,8 +15,8 @@ class App extends Component {
             <p className="text-white">See how experienced developers solve problems in real-time. Watching scripted tutorials is great,but understanding how developers thinkis invaluable.</p>
           </Col>
           <Col className="col-sm-12 col-md-12 col-lg-6">
-            <div class="top-div shadow bg-purple rounded d-flex justify-content-center align-items-center">
-              <p class="mb-0 text-white fw-light"><span class="fw-bold">Try it free 7 days</span> then $20/mo. thereafter</p>
+            <div className="top-div shadow bg-purple rounded d-flex justify-content-center align-items-center">
+              <p className="mb-0 text-white fw-light"><span className="fw-bold">Try it free 7 days</span> then $20/mo. thereafter</p>
             </div>
             <FormComponent />
             

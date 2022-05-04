@@ -5,16 +5,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class Field extends Component {
   
     render() {
-      const { value , onChangeValue, type, placeholder } = this.props;
+      const {name, type,placeholder, value, onChangeValue} = this.props;
       return (
-        <Form.Group className="mb-4">
+          <>
             <Form.Control 
+                name={name}
                 type={type}
                 placeholder={placeholder}
                 value={value}
                 onChange={onChangeValue} 
             />
-        </Form.Group>
+          </>
       );
     }
   }
