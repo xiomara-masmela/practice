@@ -1,101 +1,75 @@
+class SignUpForm {
+  constructor() {
+    this.name = document.getElementById("inputName");
+    this.lastName = document.getElementById("inputLastname");
+    this.email = document.getElementById("inputEmail");
+    this.password = document.getElementById("inputPassword");
+    this.submitButton = document.getElementById("submit-button");
 
-const button = document.getElementById("submit-button");
+    this.validateForm = this.validateForm.bind(this);
+    this.showError = this.showError.bind(this);
+    this.clearError = this.clearError.bind(this);
+    this.ensureNoneEmpty = this.ensureNoneEmpty.bind(this);
+    this.isEmailAddress = this.isEmailAddress.bind(this);
+    this.submitButton.addEventListener("click", this.validateForm);
+  }
 
-function isEmailAddress(email) {
-
-    const filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  isEmailAddress(email) {
+    const filter =
+      /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     if (!filter.test(email.value)) {
-
-        email.focus;
-
-        return false;
+      email.focus;
+      return false;
     }
-}
+    return true;
+  }
 
-function validateForm(event) {
+  showError(fieldElement, errorContainerId, message) {
+    const errorDiv = document.getElementById(errorContainerId);
+    errorDiv.innerText = message;
 
+    fieldElement.classList.add("error");
+  }
+
+  clearError(fieldElement, errorContainerId) {
+    const errorDiv = document.getElementById(errorContainerId);
+    errorDiv.innerText = "";
+
+    fieldElement.classList.remove("error");
+  }
+
+  ensureNoneEmpty(fieldElement, errorContainerId, emptyErrorMessage) {
+    if (fieldElement.value.length === 0) {
+      this.showError(fieldElement, errorContainerId, emptyErrorMessage);
+    } else {
+      this.clearError(fieldElement, errorContainerId);
+    }
+  }
+
+  validateForm(event) {
     event.preventDefault();
 
-    const name = document.getElementById("inputName");
+    this.ensureNoneEmpty(this.name, "nameError", "Name cannot be empty");
+    this.ensureNoneEmpty(
+      this.lastName,
+      "LastNameError",
+      "Last Name cannot be empty"
+    );
 
-    const lastName = document.getElementById("inputLastname");
-
-    const email = document.getElementById("inputEmail");
-
-    const password = document.getElementById("inputPassword");
-
-    const form = document.getElementById("form");
-    
-    if(name.value.length === 0){
-
-        const errorDiv = document.getElementById("nameError");
-
-        const errorMessage = document.createElement("p");
-
-        errorMessage.textContent = "Name cannot be empty";
-
-        errorDiv.append(errorMessage);
-
-        name.classList.add("error");
+    if (this.email.value.length === 0) {
+      this.showError(this.email, "emailError", "Email cannot be empty");
+    } else {
+      const isEmail = this.isEmailAddress(this.email);
+      if (!isEmail) {
+        this.showError(this.email, "emailError", "Looks like this is not an email");
+      } else {
+        this.clearError(this.email, "emailError");
+      }
     }
 
-    if(lastName.value.length === 0){
-
-        const errorDiv = document.getElementById("LastNameError");
-
-        const errorMessage = document.createElement("p");
-
-        errorMessage.textContent = "Last Name cannot be empty";
-
-        errorDiv.append(errorMessage);
-
-        lastName.classList.add("error");
-    }
-
-    if(email.value.length === 0){
-
-        const errorDiv = document.getElementById("emailError");
-
-        const errorMessage = document.createElement("p");
-
-        errorMessage.textContent = "Email cannot be empty";
-
-        errorDiv.append(errorMessage);
-
-        email.classList.add("error");
-
-    }else {
-        const isEmail = isEmailAddress(email);
-
-        if(isEmail === false) {
-
-            const errorDiv = document.getElementById("emailError");
-
-            const errorMessage = document.createElement("p");
-
-            errorMessage.textContent = "Looks like this is not an email";
-
-            errorDiv.append(errorMessage);
-
-            email.classList.add("error");
-
-        }
-    }
-
-    if(password.value.length === 0){
-
-        const errorDiv = document.getElementById("passwordError");
-
-        const errorMessage = document.createElement("p");
-
-        errorMessage.textContent = "Password cannot be empty";
-
-        errorDiv.append(errorMessage);
-
-        password.classList.add("error");
-    }
-
+    this.ensureNoneEmpty(this.password, "passwordError", "Password cannot be empty");
+  }
 }
 
-button.addEventListener("click", validateForm);
+const signUpForm = new SignUpForm();
