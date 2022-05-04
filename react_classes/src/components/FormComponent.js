@@ -81,6 +81,10 @@ class FormComponent extends Component {
                 this.setState({
                     emailErrorMessage: 'Looks like this is not an email'
                 })
+            }else {
+                this.setState({
+                    emailErrorMessage: ''
+                })
             }
 
         }
