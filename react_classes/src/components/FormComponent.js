@@ -3,15 +3,6 @@ import { Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Field from './Field';
 
-export class ErrorComponent extends Component {
-    render() {
-        const {fieldInput, errorMessage} = this.props;
-        return(
-            <div>{fieldInput} is {errorMessage} </div>
-        )
-    }
-}
-
 
 class FormComponent extends Component {
     constructor(props) {
@@ -23,7 +14,10 @@ class FormComponent extends Component {
             password: '',
             type: props.type,
             placeholder: props.placeholder,
-            errorMessage : '',
+            firstNameErrorMessage : '',
+            lastNameErrorMessage: '',
+            emailErrorMessage: '',
+            passwordErrorMessage: ''
             
         };
         this.handleChangeFirstName = this.handleChangeFirstName.bind(this);
@@ -33,11 +27,9 @@ class FormComponent extends Component {
     }
 
     handleChangeFirstName(event){
-        this.setState({
-            firstName: event.target.value
-            }
-        );
+            this.setState({firstName: event.target.value}) 
     }
+
     handleChangeLastName(event){
         this.setState({
             lastName: event.target.value
@@ -59,33 +51,57 @@ class FormComponent extends Component {
         );
     }
 
-    isEmpty(field) {
-        if(field.lenght === 0){
-            this.setState({
-                errorMessage: "This"
-            })
+    isEmail(email){
+        const filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+        if (!filter.test(email.value)) {
+            return false;
         }
     }
 
+    validateInput(firstName, lastName, email, password){
+        if(firstName.length === 0){
+            this.setState({
+                firstNameErrorMessage: 'Name cannot be empty'
+            })
+        }
+        if(lastName.length === 0){
+            this.setState({
+                lastNameErrorMessage: 'Last Name cannot be empty'
+            })
+        }
+        if(email.length === 0){
+            this.setState({
+                emailErrorMessage: 'Email cannot be empty'
+            })
+        }else {
+            const isEmail = this.isEmail(email);
+
+            if(!isEmail){
+                this.setState({
+                    emailErrorMessage: 'Looks like this is not an email'
+                })
+            }
+
+        }
+        if(password.length === 0){
+            this.setState({
+                passwordErrorMessage: 'Password cannot be empty'
+            })
+        }
+    }
 
     handleClick(event){
         event.preventDefault();
         console.log("click!");
         console.table(this.state);
-        alert("You have clicked!");
+        const firstName = this.state.firstName;
+        const lastName = this.state.lastName;
+        const email = this.state.email;
+        const password = this.state.password;
+        const errors = this.validateInput(firstName, lastName, email, password);
+
         
-        const name = this.state.firstName;
-
-        isEmpty(this.state.firstName);
-
-        
-    
-    }
-
-    handleError(event){
-        this.setState({
-            errorMessage: `${event.target.name} is empty`
-        })
     }
   
     render() {
@@ -98,12 +114,10 @@ class FormComponent extends Component {
                     placeholder="Name" 
                     value={this.state.firstName}
                     onChangeValue={this.handleChangeFirstName} 
+                    errorClass={this.state.firstNameErrorMessage.length !== 0 ? "error" : ""}
+                    
                 />
-                {this.state.firstName.length}
-                
-                     <ErrorComponent fieldInput="firstName" errorMessage="empty" />
-                
-               
+                <div className="error-div">{this.state.firstNameErrorMessage}</div>
             </Form.Group>
             <Form.Group className="mb-4">
             <Field className="mb-4" 
@@ -112,27 +126,29 @@ class FormComponent extends Component {
                 placeholder="Last Name"  
                 value={this.state.lastName}
                 onChangeValue={this.handleChangeLastName}
+                errorClass={this.state.firstNameErrorMessage.length !== 0 ? "error" : ""}
                 />
-
+                <div className="error-div">{this.state.lastNameErrorMessage}</div>
             </Form.Group>
             <Form.Group className="mb-4">
-            <Field className="mb-4" 
-                name="email"
-                type="email" 
-                placeholder="Email" 
-                value={this.state.email}
-                onChangeValue={this.handleChangeEmail} />
-
+                <Field className="mb-4" 
+                    name="email"
+                    type="email" 
+                    placeholder="Email" 
+                    value={this.state.email}
+                    onChangeValue={this.handleChangeEmail} 
+                    errorClass={this.state.emailErrorMessage.length !== 0 ? "error" : ""} />
+                <div className="error-div">{this.state.emailErrorMessage}</div>
             </Form.Group>
-            
-
             <Form.Group className="mb-4">
-            <Field className="mb-4" 
-                name="password"
-                type="password" 
-                placeholder="Password" 
-                value={this.state.password}
-                onChangeValue={this.handleChangePassword} />
+                <Field className="mb-4" 
+                    name="password"
+                    type="password" 
+                    placeholder="Password" 
+                    value={this.state.password}
+                    onChangeValue={this.handleChangePassword}
+                    errorClass={this.state.passwordErrorMessage.length !== 0 ? "error" : ""} />
+                <div className="error-div">{this.state.passwordErrorMessage}</div>
             </Form.Group>
            
             <Button variant="primary" type="submit" className="btn btn-primary w-100 text-uppercase"  onClick={this.handleClick.bind(this)}>

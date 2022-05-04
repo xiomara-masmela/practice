@@ -107,7 +107,7 @@ a {
     border-color: hsl(154deg 59% 51% / 52%);
 }
 
-.error-div > p {
+.error-div {
     font-size: 14px;
     color: hsl(0, 100%, 74%) ;
     text-align: right;
