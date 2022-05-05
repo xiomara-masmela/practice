@@ -1,6 +1,6 @@
 import { Container, Row, Col, Stack } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import FormComponent from './components/FormComponent';
 
 import './App.css';
@@ -19,8 +19,7 @@ class App extends Component {
               <p className="mb-0 text-white fw-light"><span className="fw-bold">Try it free 7 days</span> then $20/mo. thereafter</p>
             </div>
             <FormComponent />
-            
-            </Col>
+          </Col>
         </Row>
       </Container>
     );
