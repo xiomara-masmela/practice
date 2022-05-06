@@ -86,6 +86,7 @@ function FormComponent() {
                     placeholder="Name"
                     value={formState.firstName}
                     onChange={handleChange}
+                    errorClass={this.state.passwordErrorMessage.length !== 0 ? "error" : ""}
                 />
                 {firstNameEmptyError !== '' &&
                     <div className="error-div">{firstNameEmptyError} </div>

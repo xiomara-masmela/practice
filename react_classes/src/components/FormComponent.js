@@ -51,33 +51,34 @@ class FormComponent extends Component {
         );
     }
 
-    isEmail(email) {
-        const filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-
-        if (!filter.test(email.value)) {
-            return false;
-        };
-    }
-
     validateInput(firstName, lastName, email, password) {
         if (firstName.length === 0) {
             this.setState({
                 firstNameErrorMessage: 'Name cannot be empty'
             })
+        } else {
+            this.setState({
+                firstNameErrorMessage: ''
+            })
         }
+
         if (lastName.length === 0) {
             this.setState({
                 lastNameErrorMessage: 'Last Name cannot be empty'
             })
+        } else {
+            this.setState({
+                lastNameErrorMessage: ''
+            })
         }
+
         if (email.length === 0) {
             this.setState({
                 emailErrorMessage: 'Email cannot be empty'
             })
         } else {
-            const isEmail = this.isEmail(email);
-
-            if (!isEmail) {
+            const pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (!pattern.test(email)) {
                 this.setState({
                     emailErrorMessage: 'Looks like this is not an email'
                 })
@@ -88,9 +89,14 @@ class FormComponent extends Component {
             }
 
         }
+
         if (password.length === 0) {
             this.setState({
                 passwordErrorMessage: 'Password cannot be empty'
+            })
+        } else {
+            this.setState({
+                passwordErrorMessage: ''
             })
         }
     }
@@ -101,7 +107,7 @@ class FormComponent extends Component {
         const lastName = this.state.lastName;
         const email = this.state.email;
         const password = this.state.password;
-        const errors = this.validateInput(firstName, lastName, email, password);
+        this.validateInput(firstName, lastName, email, password);
     }
 
     render() {
@@ -127,7 +133,12 @@ class FormComponent extends Component {
                         onChangeValue={this.handleChangeLastName}
                         errorClass={this.state.firstNameErrorMessage.length !== 0 ? "error" : ""}
                     />
-                    <div className="error-div">{this.state.lastNameErrorMessage}</div>
+                    {
+                        this.state.lastNameErrorMessage &&
+                        <div className="error-div">{this.state.lastNameErrorMessage}</div>
+
+                    }
+
                 </Form.Group>
                 <Form.Group className="mb-4">
                     <Field className="mb-4"
@@ -138,7 +149,11 @@ class FormComponent extends Component {
                         onChangeValue={this.handleChangeEmail}
                         errorClass={this.state.emailErrorMessage.length !== 0 ? "error" : ""}
                     />
-                    <div className="error-div">{this.state.emailErrorMessage}</div>
+                    {
+                        this.state.emailErrorMessage &&
+                        <div className="error-div">{this.state.emailErrorMessage}</div>
+                    }
+
                 </Form.Group>
                 <Form.Group className="mb-4">
                     <Field className="mb-4"
@@ -149,7 +164,11 @@ class FormComponent extends Component {
                         onChangeValue={this.handleChangePassword}
                         errorClass={this.state.passwordErrorMessage.length !== 0 ? "error" : ""}
                     />
-                    <div className="error-div">{this.state.passwordErrorMessage}</div>
+                    {
+                        this.state.passwordErrorMessage &&
+                        <div className="error-div">{this.state.passwordErrorMessage}</div>
+                    }
+
                 </Form.Group>
                 <Button variant="primary" type="submit" className="btn btn-primary w-100 text-uppercase" onClick={this.handleClick.bind(this)}>
                     Claim your free trial
