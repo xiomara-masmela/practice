@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Label, Control } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Field({ name, type, placeholder, value, onChangeValue, errorClass }) {
+function Field({ name, type, placeholder, value, onChange, errorClass }) {
     return (
         <>
             <Form.Control className={errorClass}
@@ -10,7 +10,7 @@ function Field({ name, type, placeholder, value, onChangeValue, errorClass }) {
                 type={type}
                 placeholder={placeholder}
                 value={value}
-                onChange={onChangeValue}
+                onChange={onChange}
 
             />
         </>
