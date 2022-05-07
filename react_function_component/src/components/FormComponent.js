@@ -7,76 +7,119 @@ function FormComponent() {
 
     const [formState, setFormState] = useState(
         {
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
+            firstName: {
+                value: '',
+                hasError: false,
+                errorMessage: ''
+            },
+            lastName: {
+                value: '',
+                hasError: false,
+                errorMessage: ''
+            },
+            email: {
+                value: '',
+                hasError: false,
+                errorMessage: ''
+            },
+            password: {
+                value: '',
+                hasError: false,
+                errorMessage: ''
+            }
+
         }
     );
-    const [firstNameEmptyError, setFirstNameEmptyError] = useState("");
-    const [lastNameEmptyError, setLastNameEmptyError] = useState("");
-    const [emailEmptyError, setEmailEmptyError] = useState("");
-    const [passwordEmptyError, setPasswordEmptyError] = useState("");
-    const [emailNotValidError, setEmailNotValidError] = useState("");
 
     function handleChange(event) {
         const fieldName = event.target.name;
         const fieldValue = event.target.value;
+
         setFormState((previousState) => ({
             ...previousState,
-            [fieldName]: fieldValue
-        }))
-        console.log(formState)
-    }
-
-    function validateForm() {
-
-        console.log("validatinnn")
-        const firstNameErrorMessage = 'Name cannot be empty';
-        const lastNameErrorMessage = 'Last name cannot be empty';
-        const emailErrorMessage = 'Email cannot be empty';
-        const passwordErrorMessage = 'Password cannot be empty';
-
-        let index;
-
-        if (formState.firstName.length === 0) {
-            setFirstNameEmptyError(firstNameErrorMessage);
-        } else {
-            setFirstNameEmptyError("");
-        }
-
-        if (formState.lastName.length === 0) {
-            setLastNameEmptyError(lastNameErrorMessage);
-        } else {
-            setLastNameEmptyError("")
-        }
-
-        if (formState.email.length === 0) {
-            setEmailEmptyError(emailErrorMessage);
-        } else {
-            const pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            if (!pattern.test(formState.email)) {
-                setEmailNotValidError("Looks like this is not an email");
-            } else {
-                setEmailNotValidError("");
+            [fieldName]: {
+                value: fieldValue,
+                hasError: false,
+                errorMessage: ''
             }
-            setEmailEmptyError("");
+        }));
+    }
 
+    function validEmailErrorMessageText(email) {
+        let error;
+        const pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (!pattern.test(email)) {
+            error = "Looks like this is not an email";
+        }
+        return error;
+    }
+
+    function emptyErrorMessageText(fieldName) {
+        let error;
+        switch (fieldName) {
+            case 'firstName':
+                error = 'Name cannot be empty';
+                break;
+            case 'lastName':
+                error = 'Last Name cannot be empty';
+                break;
+            case 'email':
+                error = 'Email cannot be empty';
+                break;
+            default:
+                error = 'Password cannot be empty';
         }
 
-        if (formState.password.length === 0) {
-            setPasswordEmptyError(passwordErrorMessage);
-        } else {
-            setPasswordEmptyError("");
+        return error;
+    }
 
+    function validateField(fieldName, field) {
+        const emptyErrorMessage = emptyErrorMessageText(fieldName);
+
+        if (field.value.length === 0) {
+            setFormState((previousState) => ({
+                ...previousState,
+                [fieldName]: {
+                    value: '',
+                    hasError: true,
+                    errorMessage: emptyErrorMessage
+                }
+            }));
+
+        } else {
+            if (fieldName === 'email') {
+                const validEmailErrorMessage = validEmailErrorMessageText(field.value);
+                if (validEmailErrorMessage) {
+                    setFormState((previousState) => ({
+                        ...previousState,
+                        [fieldName]: {
+                            value: formState.email.value,
+                            hasError: true,
+                            errorMessage: validEmailErrorMessage
+                        }
+                    }));
+
+                }
+
+            }
         }
     }
+
 
     function handleClick(event) {
         event.preventDefault();
-        console.log(formState);
-        validateForm();
+
+        const firstName = formState.firstName;
+        const lastName = formState.lastName;
+        const email = formState.email;
+        const password = formState.password;
+
+        validateField('firstName', firstName);
+        validateField('lastName', lastName);
+        validateField('email', email);
+        validateField('password', password);
     }
+
     return (
         <Form className="form bg-white px-5 rounded-2 shadow">
             <Form.Group className="mb-4">
@@ -84,12 +127,12 @@ function FormComponent() {
                     name="firstName"
                     type="text"
                     placeholder="Name"
-                    value={formState.firstName}
+                    value={formState.firstName.value}
                     onChange={handleChange}
-                    errorClass={this.state.passwordErrorMessage.length !== 0 ? "error" : ""}
+                    errorClass={formState.firstName.hasError ? "error" : ""}
                 />
-                {firstNameEmptyError !== '' &&
-                    <div className="error-div">{firstNameEmptyError} </div>
+                {formState.firstName.hasError &&
+                    <div className="error-div">{formState.firstName.errorMessage} </div>
                 }
             </Form.Group>
             <Form.Group className="mb-4">
@@ -97,11 +140,12 @@ function FormComponent() {
                     name="lastName"
                     type="text"
                     placeholder="Last Name"
-                    value={formState.lastName}
+                    value={formState.lastName.value}
                     onChange={handleChange}
+                    errorClass={formState.lastName.hasError ? "error" : ""}
                 />
-                {lastNameEmptyError !== '' &&
-                    <div className="error-div">{lastNameEmptyError} </div>
+                {formState.lastName.hasError &&
+                    <div className="error-div">{formState.lastName.errorMessage} </div>
                 }
             </Form.Group>
             <Form.Group className="mb-4">
@@ -109,15 +153,12 @@ function FormComponent() {
                     name="email"
                     type="email"
                     placeholder="Email"
-                    value={formState.email}
+                    value={formState.email.value}
                     onChange={handleChange}
+                    errorClass={formState.email.hasError ? "error" : ""}
                 />
-                {emailEmptyError !== '' &&
-                    <div className="error-div">{emailEmptyError} </div>
-                }
-                {
-                    emailNotValidError !== '' &&
-                    <div className="error-div">{emailNotValidError} </div>
+                {formState.email.hasError &&
+                    <div className="error-div">{formState.email.errorMessage} </div>
                 }
             </Form.Group>
             <Form.Group className="mb-4">
@@ -125,14 +166,14 @@ function FormComponent() {
                     name="password"
                     type="text"
                     placeholder="Password"
-                    value={formState.password}
+                    value={formState.password.value}
                     onChange={handleChange}
+                    errorClass={formState.password.hasError ? "error" : ""}
                 />
-                {passwordEmptyError !== '' &&
-                    <div className="error-div">{passwordEmptyError} </div>
+                {formState.password.hasError &&
+                    <div className="error-div">{formState.password.errorMessage} </div>
                 }
             </Form.Group>
-
             <Button variant="primary" type="submit" className="btn btn-primary w-100 text-uppercase" onClick={handleClick}>
                 Claim your free trial
         </Button>
