@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Field from './Field';
@@ -9,27 +9,32 @@ function FormComponent() {
         {
             firstName: {
                 value: '',
+                placeholder: 'Name',
                 hasError: false,
                 errorMessage: ''
             },
             lastName: {
                 value: '',
+                placeholder: 'Last Name',
                 hasError: false,
                 errorMessage: ''
             },
             email: {
                 value: '',
+                placeholder: 'Email',
                 hasError: false,
                 errorMessage: ''
             },
             password: {
                 value: '',
+                placeholder: 'Password',
                 hasError: false,
                 errorMessage: ''
             }
 
         }
     );
+
 
     function handleChange(event) {
         const fieldName = event.target.name;
@@ -38,9 +43,8 @@ function FormComponent() {
         setFormState((previousState) => ({
             ...previousState,
             [fieldName]: {
-                value: fieldValue,
-                hasError: false,
-                errorMessage: ''
+                ...previousState[fieldName],
+                value: fieldValue
             }
         }));
     }
@@ -54,35 +58,14 @@ function FormComponent() {
         return error;
     }
 
-    function emptyErrorMessageText(fieldName) {
-        let error;
-        switch (fieldName) {
-            case 'firstName':
-                error = 'Name cannot be empty';
-                break;
-            case 'lastName':
-                error = 'Last Name cannot be empty';
-                break;
-            case 'email':
-                error = 'Email cannot be empty';
-                break;
-            default:
-                error = 'Password cannot be empty';
-        }
-
-        return error;
-    }
-
     function validateField(fieldName, field) {
-        const emptyErrorMessage = emptyErrorMessageText(fieldName);
-
         if (field.value.length === 0) {
             setFormState((previousState) => ({
                 ...previousState,
                 [fieldName]: {
-                    value: '',
+                    ...previousState[fieldName],
                     hasError: true,
-                    errorMessage: emptyErrorMessage
+                    errorMessage: `${field.placeholder} cannot be empty`
                 }
             }));
 
@@ -99,7 +82,26 @@ function FormComponent() {
                         }
                     }));
 
+                } else {
+                    setFormState((previousState) => ({
+                        ...previousState,
+                        [fieldName]: {
+                            value: formState.email.value,
+                            hasError: false,
+                            errorMessage: ''
+                        }
+                    }));
                 }
+
+            } else {
+                setFormState((previousState) => ({
+                    ...previousState,
+                    [fieldName]: {
+                        ...previousState[fieldName],
+                        hasError: false,
+                        errorMessage: ''
+                    }
+                }));
 
             }
         }
@@ -108,16 +110,10 @@ function FormComponent() {
 
     function handleClick(event) {
         event.preventDefault();
-
-        const firstName = formState.firstName;
-        const lastName = formState.lastName;
-        const email = formState.email;
-        const password = formState.password;
-
-        validateField('firstName', firstName);
-        validateField('lastName', lastName);
-        validateField('email', email);
-        validateField('password', password);
+        const fields = Object.entries(formState);
+        for (const field of fields) {
+            validateField(field[0], field[1])
+        }
     }
 
     return (
@@ -126,58 +122,52 @@ function FormComponent() {
                 <Field className="mb-4"
                     name="firstName"
                     type="text"
-                    placeholder="Name"
+                    placeholder={formState.firstName.placeholder}
                     value={formState.firstName.value}
                     onChange={handleChange}
                     errorClass={formState.firstName.hasError ? "error" : ""}
+                    errorMessage={formState.firstName.hasError ? formState.firstName.errorMessage : ""}
                 />
-                {formState.firstName.hasError &&
-                    <div className="error-div">{formState.firstName.errorMessage} </div>
-                }
             </Form.Group>
             <Form.Group className="mb-4">
                 <Field className="mb-4"
                     name="lastName"
                     type="text"
-                    placeholder="Last Name"
+                    placeholder={formState.lastName.placeholder}
                     value={formState.lastName.value}
                     onChange={handleChange}
                     errorClass={formState.lastName.hasError ? "error" : ""}
+                    errorMessage={formState.lastName.hasError ? formState.lastName.errorMessage : ""}
                 />
-                {formState.lastName.hasError &&
-                    <div className="error-div">{formState.lastName.errorMessage} </div>
-                }
+
             </Form.Group>
             <Form.Group className="mb-4">
                 <Field className="mb-4"
                     name="email"
                     type="email"
-                    placeholder="Email"
+                    placeholder={formState.email.placeholder}
                     value={formState.email.value}
                     onChange={handleChange}
                     errorClass={formState.email.hasError ? "error" : ""}
+                    errorMessage={formState.email.hasError ? formState.email.errorMessage : ""}
                 />
-                {formState.email.hasError &&
-                    <div className="error-div">{formState.email.errorMessage} </div>
-                }
+
             </Form.Group>
             <Form.Group className="mb-4">
                 <Field className="mb-4"
                     name="password"
                     type="text"
-                    placeholder="Password"
+                    placeholder={formState.password.placeholder}
                     value={formState.password.value}
                     onChange={handleChange}
                     errorClass={formState.password.hasError ? "error" : ""}
+                    errorMessage={formState.password.hasError ? formState.password.errorMessage : ""}
                 />
-                {formState.password.hasError &&
-                    <div className="error-div">{formState.password.errorMessage} </div>
-                }
             </Form.Group>
             <Button variant="primary" type="submit" className="btn btn-primary w-100 text-uppercase" onClick={handleClick}>
                 Claim your free trial
         </Button>
-            <p className="small text-center text-grey mt-3">By clicking the button, you are agreeing to our <a className="text-red">Terms and Services</a></p>
+            <p className="small text-center text-grey mt-3">By clicking the button, you are agreeing to our <a className="text-red" href="#">Terms and Services</a></p>
         </Form>
     )
 }
