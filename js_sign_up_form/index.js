@@ -13,89 +13,54 @@ function isEmailAddress(email) {
     }
 }
 
+function showError(fieldElement, errorContainerId, message) {
+    const errorDiv = document.getElementById(errorContainerId);
+    errorDiv.innerText = message;
+
+    fieldElement.classList.add("error");
+}
+
+function clearError(fieldElement, errorContainerId) {
+    const errorDiv = document.getElementById(errorContainerId);
+    errorDiv.innerText = '';
+
+    fieldElement.classList.remove("error");
+}
+
+function ensureNoneEmpty(fieldElement, errorContainerId, emptyErrorMessage) {
+    if(fieldElement.value.length === 0){
+        showError(fieldElement, errorContainerId, emptyErrorMessage);
+    } else {
+        clearError(fieldElement, errorContainerId);
+    }
+}
+
 function validateForm(event) {
 
     event.preventDefault();
 
     const name = document.getElementById("inputName");
-
     const lastName = document.getElementById("inputLastname");
-
     const email = document.getElementById("inputEmail");
-
     const password = document.getElementById("inputPassword");
-
     const form = document.getElementById("form");
-    
-    if(name.value.length === 0){
 
-        const errorDiv = document.getElementById("nameError");
-
-        const errorMessage = document.createElement("p");
-
-        errorMessage.textContent = "Name cannot be empty";
-
-        errorDiv.append(errorMessage);
-
-        name.classList.add("error");
-    }
-
-    if(lastName.value.length === 0){
-
-        const errorDiv = document.getElementById("LastNameError");
-
-        const errorMessage = document.createElement("p");
-
-        errorMessage.textContent = "Last Name cannot be empty";
-
-        errorDiv.append(errorMessage);
-
-        lastName.classList.add("error");
-    }
+    ensureNoneEmpty(name, 'nameError', 'Name cannot be empty');
+    ensureNoneEmpty(lastName, 'LastNameError', 'Last Name cannot be empty');
 
     if(email.value.length === 0){
-
-        const errorDiv = document.getElementById("emailError");
-
-        const errorMessage = document.createElement("p");
-
-        errorMessage.textContent = "Email cannot be empty";
-
-        errorDiv.append(errorMessage);
-
-        email.classList.add("error");
-
+        showError(email, 'emailError', 'Email cannot be empty');
     }else {
         const isEmail = isEmailAddress(email);
 
-        if(isEmail === false) {
-
-            const errorDiv = document.getElementById("emailError");
-
-            const errorMessage = document.createElement("p");
-
-            errorMessage.textContent = "Looks like this is not an email";
-
-            errorDiv.append(errorMessage);
-
-            email.classList.add("error");
-
+        if(!isEmail) {
+            showError(email, 'emailError', 'Looks like this is not an email');
+        } else {
+            clearError(email, 'emailError');
         }
     }
 
-    if(password.value.length === 0){
-
-        const errorDiv = document.getElementById("passwordError");
-
-        const errorMessage = document.createElement("p");
-
-        errorMessage.textContent = "Password cannot be empty";
-
-        errorDiv.append(errorMessage);
-
-        password.classList.add("error");
-    }
-
+    ensureNoneEmpty(password, 'passwordError', 'Password cannot be empty');
 }
 
 button.addEventListener("click", validateForm);
