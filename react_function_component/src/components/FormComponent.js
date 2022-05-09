@@ -130,7 +130,7 @@ function FormComponent() {
             {
                 fields.map((field, i) => {
                     return (
-                        <Field
+                        <Field key={i}
                             name={field[1].name}
                             type={field[1].type}
                             placeholder={field[1].placeholder}
