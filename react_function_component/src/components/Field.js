@@ -2,10 +2,10 @@ import React from 'react';
 import { Form, Control } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function Field({ name, type, placeholder, value, onChange, errorClass, errorMessage }) {
+function Field({ name, type, placeholder, value, onChange, hasError, errorMessage }) {
     return (
         <Form.Group className="mb-4">
-            <Form.Control className={errorClass}
+            <Form.Control className={hasError ? "error" : ""}
                 name={name}
                 type={type}
                 placeholder={placeholder}
@@ -13,7 +13,6 @@ function Field({ name, type, placeholder, value, onChange, errorClass, errorMess
                 onChange={onChange}
             />
             <div className="error-div">{errorMessage} </div>
-
         </Form.Group>
     )
 }

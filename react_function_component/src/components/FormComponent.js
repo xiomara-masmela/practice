@@ -9,24 +9,32 @@ function FormComponent() {
         {
             firstName: {
                 value: '',
+                type: 'text',
+                name: 'firstName',
                 placeholder: 'Name',
                 hasError: false,
                 errorMessage: ''
             },
             lastName: {
                 value: '',
+                type: 'text',
+                name: 'lastName',
                 placeholder: 'Last Name',
                 hasError: false,
                 errorMessage: ''
             },
             email: {
                 value: '',
+                type: 'email',
+                name: 'email',
                 placeholder: 'Email',
                 hasError: false,
                 errorMessage: ''
             },
             password: {
                 value: '',
+                type: 'text',
+                name: 'password',
                 placeholder: 'Password',
                 hasError: false,
                 errorMessage: ''
@@ -34,6 +42,8 @@ function FormComponent() {
 
         }
     );
+
+    const fields = Object.entries(formState);
 
 
     function handleChange(event) {
@@ -76,7 +86,7 @@ function FormComponent() {
                     setFormState((previousState) => ({
                         ...previousState,
                         [fieldName]: {
-                            value: formState.email.value,
+                            ...previousState[fieldName],
                             hasError: true,
                             errorMessage: validEmailErrorMessage
                         }
@@ -86,7 +96,7 @@ function FormComponent() {
                     setFormState((previousState) => ({
                         ...previousState,
                         [fieldName]: {
-                            value: formState.email.value,
+                            ...previousState[fieldName],
                             hasError: false,
                             errorMessage: ''
                         }
@@ -110,7 +120,6 @@ function FormComponent() {
 
     function handleClick(event) {
         event.preventDefault();
-        const fields = Object.entries(formState);
         for (const field of fields) {
             validateField(field[0], field[1])
         }
@@ -118,52 +127,21 @@ function FormComponent() {
 
     return (
         <Form className="form bg-white px-5 rounded-2 shadow">
-            <Form.Group className="mb-4">
-                <Field className="mb-4"
-                    name="firstName"
-                    type="text"
-                    placeholder={formState.firstName.placeholder}
-                    value={formState.firstName.value}
-                    onChange={handleChange}
-                    errorClass={formState.firstName.hasError ? "error" : ""}
-                    errorMessage={formState.firstName.hasError ? formState.firstName.errorMessage : ""}
-                />
-            </Form.Group>
-            <Form.Group className="mb-4">
-                <Field className="mb-4"
-                    name="lastName"
-                    type="text"
-                    placeholder={formState.lastName.placeholder}
-                    value={formState.lastName.value}
-                    onChange={handleChange}
-                    errorClass={formState.lastName.hasError ? "error" : ""}
-                    errorMessage={formState.lastName.hasError ? formState.lastName.errorMessage : ""}
-                />
-
-            </Form.Group>
-            <Form.Group className="mb-4">
-                <Field className="mb-4"
-                    name="email"
-                    type="email"
-                    placeholder={formState.email.placeholder}
-                    value={formState.email.value}
-                    onChange={handleChange}
-                    errorClass={formState.email.hasError ? "error" : ""}
-                    errorMessage={formState.email.hasError ? formState.email.errorMessage : ""}
-                />
-
-            </Form.Group>
-            <Form.Group className="mb-4">
-                <Field className="mb-4"
-                    name="password"
-                    type="text"
-                    placeholder={formState.password.placeholder}
-                    value={formState.password.value}
-                    onChange={handleChange}
-                    errorClass={formState.password.hasError ? "error" : ""}
-                    errorMessage={formState.password.hasError ? formState.password.errorMessage : ""}
-                />
-            </Form.Group>
+            {
+                fields.map((field, i) => {
+                    return (
+                        <Field
+                            name={field[1].name}
+                            type={field[1].type}
+                            placeholder={field[1].placeholder}
+                            value={field[1].vlaue}
+                            onChange={handleChange}
+                            hasError={field[1].hasError}
+                            errorMessage={field[1].errorMessage}
+                        />
+                    )
+                })
+            }
             <Button variant="primary" type="submit" className="btn btn-primary w-100 text-uppercase" onClick={handleClick}>
                 Claim your free trial
         </Button>
