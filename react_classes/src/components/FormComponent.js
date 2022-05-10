@@ -7,172 +7,158 @@ import Field from './Field';
 class FormComponent extends Component {
     constructor(props) {
         super(props);
+
+        // binding funcions before declaring state because
+        // validateNotEmpty and validateEmailFormat are
+        // passed to state
+        this.validateNotEmpty = this.validateNotEmpty.bind(this);
+        this.validateEmailFormat = this.validateEmailFormat.bind(this);
+        this.validateField = this.validateField.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+
         this.state = {
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-            type: props.type,
-            placeholder: props.placeholder,
-            firstNameErrorMessage: '',
-            lastNameErrorMessage: '',
-            emailErrorMessage: '',
-            passwordErrorMessage: ''
-
+            fields: {
+                firstName: {
+                    type: 'text',
+                    placeholder: 'First Name',
+                    value: '',
+                    hasError: false,
+                    errorMessage: '',
+                    validation: [
+                        this.validateNotEmpty,
+                    ]
+                },
+                lastName: {
+                    type: 'text',
+                    placeholder: 'Last Name',
+                    value: '',
+                    hasError: false,
+                    errorMessage: '',
+                    validation: [
+                        this.validateNotEmpty,
+                    ]
+                },
+                email: {
+                    type: 'email',
+                    placeholder: 'Email',
+                    value: '',
+                    hasError: false,
+                    errorMessage: '',
+                    validation: [
+                        this.validateNotEmpty,
+                        this.validateEmailFormat,
+                    ]
+                },
+                password: {
+                    type: 'text',
+                    placeholder: 'Password',
+                    value: '',
+                    hasError: false,
+                    errorMessage: '',
+                    validation: [
+                        this.validateNotEmpty,
+                    ]
+                },
+            }
         };
-        this.handleChangeFirstName = this.handleChangeFirstName.bind(this);
-        this.handleChangeLastName = this.handleChangeLastName.bind(this);
-        this.handleChangeEmail = this.handleChangeEmail.bind(this);
-        this.handleChangePassword = this.handleChangePassword.bind(this);
     }
 
-    handleChangeFirstName(event) {
-        this.setState({ firstName: event.target.value })
-    }
-
-    handleChangeLastName(event) {
+    handleChange(event) {
+        // Fields 2 levels deep just to demonstrate how to destructure
+        // when you want to only change parts of the tree
         this.setState({
-            lastName: event.target.value
-        }
-        );
+            ...this.state,
+            fields: {
+                ...this.state.fields,
+                [event.target.name]:  {
+                    ...this.state.fields[event.target.name],
+                    value: event.target.value,
+                }
+            }
+        });
     }
 
-    handleChangeEmail(event) {
-        this.setState({
-            email: event.target.value
+    validateNotEmpty(field) {
+        if (field.value.length > 0) {
+            return '';
         }
-        );
+
+        return `${field.placeholder} cannot be empty`
     }
 
-    handleChangePassword(event) {
-        this.setState({
-            password: event.target.value
+    validateEmailFormat(field) {
+        const pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (pattern.test(field.value)) {
+            return '';
         }
-        );
+
+        return `${field.placeholder} does not look like a valid email`;
     }
 
-    validateInput(firstName, lastName, email, password) {
-        if (firstName.length === 0) {
-            this.setState({
-                firstNameErrorMessage: 'Name cannot be empty'
-            })
-        } else {
-            this.setState({
-                firstNameErrorMessage: ''
-            })
-        }
-
-        if (lastName.length === 0) {
-            this.setState({
-                lastNameErrorMessage: 'Last Name cannot be empty'
-            })
-        } else {
-            this.setState({
-                lastNameErrorMessage: ''
-            })
-        }
-
-        if (email.length === 0) {
-            this.setState({
-                emailErrorMessage: 'Email cannot be empty'
-            })
-        } else {
-            const pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            if (!pattern.test(email)) {
-                this.setState({
-                    emailErrorMessage: 'Looks like this is not an email'
-                })
-            } else {
-                this.setState({
-                    emailErrorMessage: ''
-                })
+    validateField(fieldName, field) {
+        const validationResult = field.validation.reduce((accu, validation) => {
+            // return the validation error returned by either validateNotEmpty or validateEmailFormat.
+            // do not run further validations when one already failed
+            if (accu.length > 0) {
+                return accu;
             }
 
-        }
+            // return the error message sent back by either
+            // validateNotEmpty or validateEmailFormat
+            return validation(field);
+        }, ''); // accumulator starts as an empty error message
 
-        if (password.length === 0) {
-            this.setState({
-                passwordErrorMessage: 'Password cannot be empty'
-            })
-        } else {
-            this.setState({
-                passwordErrorMessage: ''
-            })
-        }
+        // same approach as handleChange but changing
+        // hasError and errorMessage this time
+        // Note the use of the setState overload that
+        // accepts prevState. This ensures we get the
+        // latest state when using setState in a loop
+        this.setState((prevState) => ({
+            ...prevState,
+            fields: {
+                ...prevState.fields,
+                [fieldName]:  {
+                    ...prevState.fields[fieldName],
+                    hasError: validationResult.length > 0,
+                    errorMessage: validationResult,
+                }
+            }
+        }));
     }
 
     handleClick(event) {
         event.preventDefault();
-        const firstName = this.state.firstName;
-        const lastName = this.state.lastName;
-        const email = this.state.email;
-        const password = this.state.password;
-        this.validateInput(firstName, lastName, email, password);
+
+        // using Object.entries to iterate through all keys and values of an object
+        // for easy validation
+        Object.entries(this.state.fields).forEach(([fieldName, field]) => {
+            this.validateField(fieldName, field);
+        })
     }
 
     render() {
         return (
             <Form className="form bg-white px-5 rounded-2 shadow">
-                <Form.Group className="mb-4">
-                    <Field className="mb-4"
-                        name="firstName"
-                        type="text"
-                        placeholder="Name"
-                        value={this.state.firstName}
-                        onChangeValue={this.handleChangeFirstName}
-                        errorClass={this.state.firstNameErrorMessage.length !== 0 ? "error" : ""}
-                    />
-                    <div className="error-div">{this.state.firstNameErrorMessage}</div>
-                </Form.Group>
-                <Form.Group className="mb-4">
-                    <Field className="mb-4"
-                        name="lastName"
-                        type="text"
-                        placeholder="Last Name"
-                        value={this.state.lastName}
-                        onChangeValue={this.handleChangeLastName}
-                        errorClass={this.state.firstNameErrorMessage.length !== 0 ? "error" : ""}
-                    />
-                    {
-                        this.state.lastNameErrorMessage &&
-                        <div className="error-div">{this.state.lastNameErrorMessage}</div>
-
-                    }
-
-                </Form.Group>
-                <Form.Group className="mb-4">
-                    <Field className="mb-4"
-                        name="email"
-                        type="email"
-                        placeholder="Email"
-                        value={this.state.email}
-                        onChangeValue={this.handleChangeEmail}
-                        errorClass={this.state.emailErrorMessage.length !== 0 ? "error" : ""}
-                    />
-                    {
-                        this.state.emailErrorMessage &&
-                        <div className="error-div">{this.state.emailErrorMessage}</div>
-                    }
-
-                </Form.Group>
-                <Form.Group className="mb-4">
-                    <Field className="mb-4"
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                        value={this.state.password}
-                        onChangeValue={this.handleChangePassword}
-                        errorClass={this.state.passwordErrorMessage.length !== 0 ? "error" : ""}
-                    />
-                    {
-                        this.state.passwordErrorMessage &&
-                        <div className="error-div">{this.state.passwordErrorMessage}</div>
-                    }
-
-                </Form.Group>
+                {
+                // using Object.entries to iterate through all keys and values of an object
+                // for easy form generation
+                }
+                {Object.entries(this.state.fields).map(([name, field]) => (
+                    <Form.Group key={name} className="mb-4">
+                        <Field className="mb-4"
+                            name={name}
+                            type={field.type}
+                            placeholder={field.placeholder}
+                            value={field.value}
+                            onChangeValue={this.handleChange}
+                            hasError={field.hasError}
+                            errorMessage={field.errorMessage}
+                        />
+                    </Form.Group>
+                ))}
                 <Button variant="primary" type="submit" className="btn btn-primary w-100 text-uppercase" onClick={this.handleClick.bind(this)}>
                     Claim your free trial
-            </Button>
+                </Button>
                 <p className="small text-center text-grey mt-3">By clicking the button, you are agreeing to our <a className="text-red">Terms and Services</a></p>
             </Form>
         );
