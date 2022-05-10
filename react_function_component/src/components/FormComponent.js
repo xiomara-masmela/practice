@@ -120,24 +120,24 @@ function FormComponent() {
 
     function handleClick(event) {
         event.preventDefault();
-        for (const field of fields) {
-            validateField(field[0], field[1])
+        for (const  [fieldName, field] of fields) {
+            validateField(fieldName, field)
         }
     }
 
     return (
         <Form className="form bg-white px-5 rounded-2 shadow">
             {
-                fields.map((field, i) => {
+                fields.map(([fieldName, field], i) => {
                     return (
-                        <Field
-                            name={field[1].name}
-                            type={field[1].type}
-                            placeholder={field[1].placeholder}
-                            value={field[1].vlaue}
+                        <Field key={i}
+                            name={fieldName}
+                            type={field.type}
+                            placeholder={field.placeholder}
+                            value={field.vlaue}
                             onChange={handleChange}
-                            hasError={field[1].hasError}
-                            errorMessage={field[1].errorMessage}
+                            hasError={field.hasError}
+                            errorMessage={field.errorMessage}
                         />
                     )
                 })
