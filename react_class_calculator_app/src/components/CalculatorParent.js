@@ -120,6 +120,11 @@ class CalculatorParent extends Component {
       }
     };
   }
+
+  handleChange(event) {
+    event.preventDefault();
+    console.log(event.target.value);
+}
   render() {
     return (
       <Container>

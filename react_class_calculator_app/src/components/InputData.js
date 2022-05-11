@@ -9,6 +9,7 @@ class InputData extends Component {
     
     render() {
         const {fields} = this.props;
+        console.log(fields);
         return (
             <Form>
                 <Field
