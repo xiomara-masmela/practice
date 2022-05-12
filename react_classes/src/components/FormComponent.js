@@ -24,7 +24,7 @@ class FormComponent extends Component {
                     value: '',
                     hasError: false,
                     errorMessage: '',
-                    validation: [
+                    validators: [
                         this.validateNotEmpty,
                     ]
                 },
@@ -34,7 +34,7 @@ class FormComponent extends Component {
                     value: '',
                     hasError: false,
                     errorMessage: '',
-                    validation: [
+                    validators: [
                         this.validateNotEmpty,
                     ]
                 },
@@ -44,7 +44,7 @@ class FormComponent extends Component {
                     value: '',
                     hasError: false,
                     errorMessage: '',
-                    validation: [
+                    validators: [
                         this.validateNotEmpty,
                         this.validateEmailFormat,
                     ]
@@ -55,7 +55,7 @@ class FormComponent extends Component {
                     value: '',
                     hasError: false,
                     errorMessage: '',
-                    validation: [
+                    validators: [
                         this.validateNotEmpty,
                     ]
                 },
@@ -96,17 +96,29 @@ class FormComponent extends Component {
     }
 
     validateField(fieldName, field) {
-        const validationResult = field.validation.reduce((accu, validation) => {
-            // return the validation error returned by either validateNotEmpty or validateEmailFormat.
-            // do not run further validations when one already failed
-            if (accu.length > 0) {
-                return accu;
-            }
+        let validationResult = '';
 
-            // return the error message sent back by either
-            // validateNotEmpty or validateEmailFormat
-            return validation(field);
-        }, ''); // accumulator starts as an empty error message
+        // loop through all validators
+        for (const validator of field.validators) {
+            validationResult = validator(field); //validateNotEmpty
+
+            const validationFailed = validationResult.length > 0;
+            if (validationFailed) {
+                break; // stop validation as soon as a validator fails
+            }
+        }
+
+        // const validationResult = field.validation.reduce((accu, validation) => {
+        //     // return the validation error returned by either validateNotEmpty or validateEmailFormat.
+        //     // do not run further validations when one already failed
+        //     if (accu.length > 0) {
+        //         return accu;
+        //     }
+
+        //     // return the error message sent back by either
+        //     // validateNotEmpty or validateEmailFormat
+        //     return validation(field);
+        // }, ''); // accumulator starts as an empty error message
 
         // same approach as handleChange but changing
         // hasError and errorMessage this time
@@ -134,6 +146,25 @@ class FormComponent extends Component {
         Object.entries(this.state.fields).forEach(([fieldName, field]) => {
             this.validateField(fieldName, field);
         })
+
+        const objectArray = Object.entries(this.state.fields).map(([key, value]) => {
+            return {
+                ...value,
+                name: key,
+            };
+        })
+        console.log(objectArray);
+
+        const reduceToConvertToObject = objectArray.reduce((accu, currentItem) => {
+            console.log(accu);
+            return {
+                ...accu,
+                [currentItem.name] : {
+                    ...currentItem,
+                },
+            }
+        }, {});
+        console.log(reduceToConvertToObject);
     }
 
     render() {

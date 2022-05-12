@@ -13,7 +13,10 @@ function FormComponent() {
                 name: 'firstName',
                 placeholder: 'Name',
                 hasError: false,
-                errorMessage: ''
+                errorMessage: '',
+                validators: [
+                    validateNotEmpty,
+                ],
             },
             lastName: {
                 value: '',
@@ -21,7 +24,10 @@ function FormComponent() {
                 name: 'lastName',
                 placeholder: 'Last Name',
                 hasError: false,
-                errorMessage: ''
+                errorMessage: '',
+                validators: [
+                    validateNotEmpty,
+                ]
             },
             email: {
                 value: '',
@@ -29,7 +35,11 @@ function FormComponent() {
                 name: 'email',
                 placeholder: 'Email',
                 hasError: false,
-                errorMessage: ''
+                errorMessage: '',
+                validators: [
+                    validateNotEmpty,
+                    validateEmailFormat,
+                ]
             },
             password: {
                 value: '',
@@ -37,16 +47,30 @@ function FormComponent() {
                 name: 'password',
                 placeholder: 'Password',
                 hasError: false,
-                errorMessage: ''
+                errorMessage: '',
+                validators: [
+                    validateNotEmpty,
+                    validateMinLength(8),
+                ]
+            },
+            newPassword: {
+                value: '',
+                type: 'text',
+                name: 'newPassword',
+                placeholder: 'Confirm Password',
+                hasError: false,
+                errorMessage: '',
+                validators: [
+                    validateNotEmpty,
+                    validateMinLength(5),
+                ]
             }
-
         }
     );
 
     const fields = Object.entries(formState);
 
-
-    function handleChange(event) {
+    const handleChange = (event) => {
         const fieldName = event.target.name;
         const fieldValue = event.target.value;
 
@@ -59,64 +83,59 @@ function FormComponent() {
         }));
     }
 
-    function validEmailErrorMessageText(email) {
-        let error;
-        const pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        if (!pattern.test(email)) {
-            error = "Looks like this is not an email";
+    function validateNotEmpty(field) {
+        if (field.value.length > 0) {
+            return '';
         }
-        return error;
+
+        return `${field.placeholder} cannot be empty`
+    }
+
+    // Currying: Like a function that returns another function
+    const validateMinLength = (minLength) => (field) => {
+        if (field.length > minLength) {
+            return '';
+        }
+
+        return `${field.placeholder} must be at least ${minLength} characters long`;
+    }
+
+    function validateEmailFormat(field) {
+        const pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (pattern.test(field.value)) {
+            return '';
+        }
+
+        return `${field.placeholder} does not look like a valid email`;
     }
 
     function validateField(fieldName, field) {
-        if (field.value.length === 0) {
-            setFormState((previousState) => ({
-                ...previousState,
-                [fieldName]: {
-                    ...previousState[fieldName],
-                    hasError: true,
-                    errorMessage: `${field.placeholder} cannot be empty`
-                }
-            }));
+        let validationResult = '';
 
-        } else {
-            if (fieldName === 'email') {
-                const validEmailErrorMessage = validEmailErrorMessageText(field.value);
-                if (validEmailErrorMessage) {
-                    setFormState((previousState) => ({
-                        ...previousState,
-                        [fieldName]: {
-                            ...previousState[fieldName],
-                            hasError: true,
-                            errorMessage: validEmailErrorMessage
-                        }
-                    }));
+        // loop through all validators
+        for (const validator of field.validators) {
+            validationResult = validator(field); //validateNotEmpty
 
-                } else {
-                    setFormState((previousState) => ({
-                        ...previousState,
-                        [fieldName]: {
-                            ...previousState[fieldName],
-                            hasError: false,
-                            errorMessage: ''
-                        }
-                    }));
-                }
-
-            } else {
-                setFormState((previousState) => ({
-                    ...previousState,
-                    [fieldName]: {
-                        ...previousState[fieldName],
-                        hasError: false,
-                        errorMessage: ''
-                    }
-                }));
-
+            const validationFailed = validationResult.length > 0;
+            if (validationFailed) {
+                break; // stop validation as soon as a validator fails
             }
         }
-    }
 
+        // same approach as handleChange but changing
+        // hasError and errorMessage this time
+        // Note the use of the setState overload that
+        // accepts prevState. This ensures we get the
+        // latest state when using setState in a loop
+        setFormState((previousState) => ({
+            ...previousState,
+            [fieldName]: {
+                ...previousState[fieldName],
+                hasError: validationResult.length > 0,
+                errorMessage:  validationResult
+            }
+        }));
+    }
 
     function handleClick(event) {
         event.preventDefault();
