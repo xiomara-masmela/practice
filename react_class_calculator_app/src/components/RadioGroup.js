@@ -5,15 +5,23 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class RadioGroup extends Component {
 
     render() {
-        const { name, type, label, value, onChangeValue, hasError, errorMessage } = this.props;
+        const { name, options, onChange } = this.props;
         return (
-            <>  
-                <Form.Check
-                    type={type}
-                    value={value}
-                    label={label}
-                />
-            </>
+            <div >
+                {
+                    options.map((option) => (
+                        <Form.Check key={option.label}
+                            type='radio'
+                            value={option.value}
+                            label={option.label}
+                            checked={option.checked}
+                            onChange={onChange}
+                            name={name}
+                        />
+                    ))
+                }
+
+            </div>
         );
     }
 }

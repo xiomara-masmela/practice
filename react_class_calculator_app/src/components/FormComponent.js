@@ -9,7 +9,6 @@ class FormComponent extends Component {
     
     render() {
         const {fields} = this.props;
-        console.log(Object.keys(fields));
         return (
             <Form>
                 <Field
@@ -21,18 +20,7 @@ class FormComponent extends Component {
                     onChange={fields.billTotal.onChange}
                 />
                 <Form.Label>Select tip %</Form.Label>
-                 {
-                     Object.entries(fields.tipValue).map(([name, field]) => (
-                         <RadioGroup key={name}
-                            type={field.type}
-                            value={field.value}
-                            checked={field.checked}
-                            label={field.label}
-                            onChange={field.onChange}
-                         />
-                         
-                     ))
-                 }
+                <RadioGroup name={fields.tipValue.name} options={fields.tipValue.options} onChange={fields.tipValue.onChange} />
                 <Field
                     name={fields.numberPeople.name}
                     label={fields.numberPeople.label}

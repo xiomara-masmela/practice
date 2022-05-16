@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class Field extends Component {
 
   render() {
-    const { name, label, type, placeholder, value, onChangeValue, hasError, errorMessage } = this.props;
+    const { name, label, type, placeholder, value, onChange, hasError, errorMessage } = this.props;
     return (
       <>
         <Form.Label>{label}</Form.Label>
@@ -15,7 +15,7 @@ class Field extends Component {
           type={type}
           placeholder={placeholder}
           value={value}
-          onChange={onChangeValue}
+          onChange={onChange}
         />
         {hasError &&
           <div className="error-div">{errorMessage}</div>

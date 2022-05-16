@@ -4,24 +4,16 @@ import React, { Component } from 'react';
 import Field from "./Field";
 
 
-class CalculateTip extends Component {
+class TotalTip extends Component {
   render() {
     const {fields} = this.props;
+    console.log(fields);
     return (
       <Container>
         <Row className="d-flex flex-wrap main-content justify-content-between">
-          {
-            Object.entries(fields).map(([name, field]) => (
-              <Field key={name}
-                name={field.name}
-                label={field.label}
-                type={field.type}
-                placeholder={field.placeholder}
-                value={field.value}
-                onChange={this.onChangeValue}
-              />
-            ))
-          }
+           <p>{((fields.billTotal.value * fields.tipValue.value) / fields.numberPeople.value).toFixed(2)}</p>
+           
+           <p>{((fields.billTotal.value /fields.numberPeople.value) + (fields.billTotal.value * fields.tipValue.value) / fields.numberPeople.value).toFixed(2)}</p>
           <Button variant="primary" type="submit">
             Reset
           </Button>
@@ -32,4 +24,4 @@ class CalculateTip extends Component {
     );
   }
 }
-export default CalculateTip;
+export default TotalTip;
