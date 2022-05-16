@@ -2,14 +2,13 @@ import { Form, Group, Label, Control, Text, Button, InputGroup, Checkbox, FormCo
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
 import Field from './Field';
-import RadioField from './RadioField';
+import RadioGroup from './RadioGroup';
 
 
-class InputData extends Component {
+class FormComponent extends Component {
     
     render() {
         const {fields} = this.props;
-        console.log(fields);
         return (
             <Form>
                 <Field
@@ -21,18 +20,7 @@ class InputData extends Component {
                     onChange={fields.billTotal.onChange}
                 />
                 <Form.Label>Select tip %</Form.Label>
-                 {
-                     Object.entries(fields.tipValue).map(([name, field]) => (
-                         <RadioField key={name}
-                            type={field.type}
-                            value={field.value}
-                            checked={field.checked}
-                            label={field.label}
-                            onChange={field.onChange}
-                         />
-                         
-                     ))
-                 }
+                <RadioGroup name={fields.tipValue.name} options={fields.tipValue.options} onChange={fields.tipValue.onChange} />
                 <Field
                     name={fields.numberPeople.name}
                     label={fields.numberPeople.label}
@@ -45,4 +33,4 @@ class InputData extends Component {
         );
     }
 }
-export default InputData;
+export default FormComponent;

@@ -1,8 +1,8 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
-import InputData from './InputData';
-import CalculateTip from './CalculateTip';
+import TotalTip from './TotalTip';
+import FormComponent from './FormComponent';
 
 
 class CalculatorParent extends Component {
@@ -21,12 +21,12 @@ class CalculatorParent extends Component {
       fields: {
         inputData: {
           billTotal: {
-            value: '',
+            value: 0.00,
             name: 'billTotal',
             type: 'number',
             label: 'Bill',
             onChange: this.handleChange,
-            placeholder: '0',
+            placeholder: '0.00',
             hasError: false,
             errorMessage: '',
             validation: [
@@ -34,106 +34,102 @@ class CalculatorParent extends Component {
             ]
           },
           tipValue: {
-            5: {
-              value: 5,
-              name: 'tipValue',
-              type: 'radio',
-              label: '5%',
-              onChange: this.handleChange,
-              checked: false
-            },
-            10: {
-              value: 10,
-              name: 'tipValue',
-              type: 'radio',
-              label: '10%',
-              onChange: this.handleChange,
-              checked: false
-            },
-            15: {
-              value: 15,
-              name: 'tipValue',
-              type: 'radio',
-              label: '15%',
-              onChange: this.handleChange,
-              checked: false
-            },
-            25: {
-              value: 25,
-              name: 'tipValue',
-              type: 'radio',
-              label: '25%',
-              onChange: this.handleChange,
-              checked: false
-            },
-            50: {
-              value: 50,
-              name: 'tipValue',
-              type: 'radio',
-              label: '50%',
-              onChange: this.handleChange,
-              checked: false
-            },
-            custom: {
-              value: 0,
-              name: 'tipValue',
-              type: 'radio',
-              label: 'Custom',
-              onChange: this.handleChange,
-              checked: false
-            }
+            name: 'tipValue',
+            type: 'RadioGroup',
+            onChange: this.handleChange,
+            value: 0,
+            options: [
+              {
+                value: 0.05,
+                name: 'tipValue',
+                type: 'radio',
+                label: '5%',
+                checked: false
+              },
+              {
+                value: 0.1,
+                name: 'tipValue',
+                type: 'radio',
+                label: '10%',
+                checked: false
+              }, {
+                value: 0.15,
+                name: 'tipValue',
+                type: 'radio',
+                label: '15%',
+                checked: false
+              },
+              {
+                value: 0.25,
+                name: 'tipValue',
+                type: 'radio',
+                label: '25%',
+                checked: false
+              },
+              {
+                value: 0.50,
+                name: 'tipValue',
+                type: 'radio',
+                label: '50%',
+                checked: false
+              },
+              {
+                value: 0,
+                name: 'tipValue',
+                type: 'radio',
+                label: 'Custom',
+                checked: false
+              }
+
+            ]
+
           },
           numberPeople: {
-            value: '',
+            value: 0.00,
             name: 'numberPeople',
             type: 'number',
             label: 'Number of People',
             onChange: this.handleChange,
-            placeholder: '0',
+            placeholder: '0.00',
             hasError: false,
             errorMessage: '',
             validation: [
               // this.validateNotZero,
             ]
           }
-        },
-        calculateData: {
-          tipAmount: {
-            value: '',
-            name: 'tipAmount',
-            type: 'number',
-            label: 'Tip Amount',
-            onChange: this.handleChange,
-            placeholder: '0',
-          },
-          total: {
-            value: '',
-            name: 'total',
-            type: 'number',
-            label: 'Tip Amount',
-            placeholder: '0',
-
-          }
-
         }
-
       }
     };
   }
 
   handleChange(event) {
     event.preventDefault();
-    console.log(event.target.value);
-}
+    console.log(event.target.value, event.target)
+    this.setState({
+      ...this.state,
+      fields: {
+        ...this.state.fields,
+        inputData: {
+          ...this.state.fields.inputData,
+          [event.target.name]: {
+            ...this.state.fields.inputData[event.target.name],
+            value: event.target.value,
+          }
+
+        }
+
+      }
+    });
+  }
   render() {
     return (
       <Container>
         <Row className="d-flex flex-wrap main-content justify-content-between">
           <Col className="col-lg-5 col-md-12  col-sm-12   d-flex  flex-column justify-content-center">
-            <InputData fields={this.state.fields.inputData} />
+            <FormComponent fields={this.state.fields.inputData} />
           </Col>
           <Col className="col-lg-5 col-md-12  col-sm-12   d-flex  flex-column justify-content-center">
-            <CalculateTip fields={this.state.fields.calculateData} />
+            <TotalTip fields={this.state.fields.inputData} />
           </Col>
         </Row>
       </Container>
