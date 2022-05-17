@@ -41,48 +41,28 @@ class CalculatorParent extends Component {
             options: [
               {
                 value: 0.05,
-                name: 'tipValue',
-                type: 'radio',
                 label: '5%',
-                checked: false
               },
               {
                 value: 0.1,
-                name: 'tipValue',
-                type: 'radio',
                 label: '10%',
-                checked: false
               }, {
                 value: 0.15,
-                name: 'tipValue',
-                type: 'radio',
                 label: '15%',
-                checked: false
               },
               {
                 value: 0.25,
-                name: 'tipValue',
-                type: 'radio',
                 label: '25%',
-                checked: false
               },
               {
                 value: 0.50,
-                name: 'tipValue',
-                type: 'radio',
                 label: '50%',
-                checked: false
               },
               {
                 value: 0,
-                name: 'tipValue',
-                type: 'radio',
                 label: 'Custom',
-                checked: false
               }
-
             ]
-
           },
           numberPeople: {
             value: 0.00,
@@ -104,6 +84,7 @@ class CalculatorParent extends Component {
 
   handleChange(event) {
     event.preventDefault();
+    console.log('handleChange')
     console.log(event.target.value, event.target)
     this.setState({
       ...this.state,
@@ -122,6 +103,9 @@ class CalculatorParent extends Component {
     });
   }
   render() {
+    console.log('render');
+    console.log(this.state.fields.inputData);
+
     return (
       <Container>
         <Row className="d-flex flex-wrap main-content justify-content-between">
