@@ -20,7 +20,7 @@ class FormComponent extends Component {
                     onChange={fields.billTotal.onChange}
                 />
                 <Form.Label>Select tip %</Form.Label>
-                <RadioGroup name={fields.tipValue.name} options={fields.tipValue.options} onChange={fields.tipValue.onChange} />
+                <RadioGroup name={fields.tipValue.name} options={fields.tipValue.options} onChange={fields.tipValue.onChange} value={fields.tipValue.value} />
                 <Field
                     name={fields.numberPeople.name}
                     label={fields.numberPeople.label}

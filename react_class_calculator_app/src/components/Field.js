@@ -3,7 +3,6 @@ import { Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Field extends Component {
-
   render() {
     const { name, label, type, placeholder, value, onChange, hasError, errorMessage } = this.props;
     return (
