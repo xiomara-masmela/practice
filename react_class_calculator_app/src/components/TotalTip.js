@@ -6,13 +6,13 @@ import Field from "./Field";
 
 class TotalTip extends Component {
   render() {
-    const {fields} = this.props;
+    const { fields } = this.props;
     return (
       <Container>
         <Row className="d-flex flex-wrap main-content justify-content-between">
-           <p>{((fields.billTotal.value * fields.tipValue.value.value) / fields.numberPeople.value).toFixed(2)}</p>
-           
-           <p>{((fields.billTotal.value /fields.numberPeople.value) + (fields.billTotal.value * fields.tipValue.value.value) / fields.numberPeople.value).toFixed(2)}</p>
+          <div>{isNaN(fields.tipAmount.value) ? "" : fields.tipAmount.value}
+          </div>
+          <div>{isNaN(fields.total.value) ? "" : fields.total.value}</div>
           <Button variant="primary" type="submit">
             Reset
           </Button>
