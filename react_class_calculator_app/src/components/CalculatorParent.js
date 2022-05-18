@@ -21,7 +21,7 @@ class CalculatorParent extends Component {
       fields: {
         inputData: {
           billTotal: {
-            value: 0.00,
+            value: "",
             name: 'billTotal',
             type: 'number',
             label: 'Bill',
@@ -37,7 +37,7 @@ class CalculatorParent extends Component {
             name: 'tipValue',
             type: 'RadioGroup',
             onChange: this.handleChange,
-            value: 0,
+            value: "",
             options: [
               {
                 value: 0.05,
@@ -65,7 +65,7 @@ class CalculatorParent extends Component {
             ]
           },
           numberPeople: {
-            value: 0.00,
+            value: "",
             name: 'numberPeople',
             type: 'number',
             label: 'Number of People',
@@ -77,6 +77,14 @@ class CalculatorParent extends Component {
               // this.validateNotZero,
             ]
           }
+        },
+        calculateData: {
+          tipAmount: {
+            value: ""
+          },
+          total: {
+            value: ""
+          }
         }
       }
     };
@@ -84,8 +92,15 @@ class CalculatorParent extends Component {
 
   handleChange(event) {
     event.preventDefault();
-    console.log('handleChange')
-    console.log(event.target.value, event.target)
+    const billTotal = Number(this.state.fields.inputData.billTotal.value);
+    const tipValue = this.state.fields.inputData.tipValue.value.value;
+    const numberOfPeople = Number(this.state.fields.inputData.numberPeople.value);
+    const totalTipAmount = billTotal * tipValue / numberOfPeople;
+    const totalPayPerson = billTotal / numberOfPeople + totalTipAmount;
+    console.log(this.state.fields.inputData.tipValue.value.value);
+    console.log(billTotal);
+    console.log(numberOfPeople);
+
     this.setState({
       ...this.state,
       fields: {
@@ -96,16 +111,25 @@ class CalculatorParent extends Component {
             ...this.state.fields.inputData[event.target.name],
             value: event.target.value,
           }
-
+        },
+        calculateData : {
+          ...this.state.fields.calculateData,
+          tipAmount: {
+            ...this.state.fields.calculateData.tipAmount,
+            value: totalTipAmount
+          },
+          total: {
+            ...this.state.fields.calculateData.total,
+            value: totalPayPerson
+          }
         }
 
       }
     });
+
   }
   render() {
-    console.log('render');
-    console.log(this.state.fields.inputData);
-
+    console.log(this.state)
     return (
       <Container>
         <Row className="d-flex flex-wrap main-content justify-content-between">
@@ -113,7 +137,7 @@ class CalculatorParent extends Component {
             <FormComponent fields={this.state.fields.inputData} />
           </Col>
           <Col className="col-lg-5 col-md-12  col-sm-12   d-flex  flex-column justify-content-center">
-            <TotalTip fields={this.state.fields.inputData} />
+            <TotalTip fields={this.state.fields.calculateData} />
           </Col>
         </Row>
       </Container>
