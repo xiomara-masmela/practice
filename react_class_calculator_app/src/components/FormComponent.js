@@ -1,8 +1,13 @@
-import { Form, Group, Label, Control, Text, Button, InputGroup, Checkbox, FormControl } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
 import Field from './Field';
 import RadioGroup from './RadioGroup';
+import {
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    FormHelperText,
+  } from '@chakra-ui/react'
 
 
 class FormComponent extends Component {
@@ -10,7 +15,7 @@ class FormComponent extends Component {
     render() {
         const {fields} = this.props;
         return (
-            <Form>
+            <FormControl>
                 <Field
                     name={fields.billTotal.name}
                     label={fields.billTotal.label}
@@ -19,7 +24,7 @@ class FormComponent extends Component {
                     value={fields.billTotal.value}
                     onChange={fields.billTotal.onChange}
                 />
-                <Form.Label>Select tip %</Form.Label>
+                <FormLabel>Select tip %</FormLabel>
                 <RadioGroup name={fields.tipValue.name} options={fields.tipValue.options} onChange={fields.tipValue.onChange} value={fields.tipValue.value} />
                 <Field
                     name={fields.numberPeople.name}
@@ -29,7 +34,7 @@ class FormComponent extends Component {
                     value={fields.numberPeople.value}
                     onChange={fields.numberPeople.onChange}
                 />
-            </Form>
+            </FormControl>
         );
     }
 }

@@ -1,20 +1,35 @@
-import { Container, Row } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container } from '@chakra-ui/react'
 import React, { Component } from 'react';
-
-
-import './App.css';
+import { extendTheme, ChakraProvider } from '@chakra-ui/react'
 import CalculatorParent from './components/CalculatorParent';
+import './App.css';
+
+const colors = {
+  brand: {
+    900: '#1a365d',
+    800: '#153e75',
+    700: '#2a69ac',
+  },
+}
+
+const theme = extendTheme({ colors })
 
 class App extends Component {
   render() {
     return (
-      <Container>
+      <ChakraProvider theme={theme}>
+        <Container>
         <h1> SPLITTER</h1>
-        <Row className="d-flex flex-wrap main-content justify-content-between">
+          
           <CalculatorParent />
-        </Row>
-      </Container>
+
+        </Container>
+         
+          
+        
+
+      </ChakraProvider>
+
     );
   }
 }
