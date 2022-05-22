@@ -1,8 +1,8 @@
-import { Container } from '@chakra-ui/react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Flex } from '@chakra-ui/react';
 import React, { Component } from 'react';
 import TotalTip from './TotalTip';
 import FormComponent from './FormComponent';
+import customTheme  from '../componentTheme';
 
 
 class CalculatorParent extends Component {
@@ -131,14 +131,10 @@ class CalculatorParent extends Component {
   render() {
     console.log(this.state)
     return (
-      <Container>
-        
-          
-            <FormComponent fields={this.state.fields.inputData} />
-         
+      <Flex bg={customTheme.colors.white} width="800px" borderRadius="10px" padding="30px" >
+            <FormComponent fields={this.state.fields.inputData}  />
             <TotalTip fields={this.state.fields.calculateData} />
-          
-      </Container>
+      </Flex>
 
 
     );

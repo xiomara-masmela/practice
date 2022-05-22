@@ -1,35 +1,20 @@
-import { Container } from '@chakra-ui/react'
+import { Container, Flex, ChakraProvider, Heading } from '@chakra-ui/react';
 import React, { Component } from 'react';
-import { extendTheme, ChakraProvider } from '@chakra-ui/react'
 import CalculatorParent from './components/CalculatorParent';
-import './App.css';
-
-const colors = {
-  brand: {
-    900: '#1a365d',
-    800: '#153e75',
-    700: '#2a69ac',
-  },
-}
-
-const theme = extendTheme({ colors })
+import customTheme  from './componentTheme';
+import "@fontsource/space-mono";
 
 class App extends Component {
   render() {
     return (
-      <ChakraProvider theme={theme}>
-        <Container>
-        <h1> SPLITTER</h1>
-          
+      <ChakraProvider theme={customTheme}>
+        <Container maxW='1200px' h="100vh" pt="150px">
+          <Flex width="full" align="center" justifyContent="center" direction="column">
+          <Heading mb="60px" as="h1" width="75px" fontSize="26px" letterSpacing="0.4px" color="hsl(186, 14%, 43%)" > SPLITTER</Heading>
           <CalculatorParent />
-
+          </Flex>
         </Container>
-         
-          
-        
-
       </ChakraProvider>
-
     );
   }
 }

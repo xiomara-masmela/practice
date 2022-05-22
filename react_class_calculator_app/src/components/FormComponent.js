@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Field from './Field';
 import RadioGroup from './RadioGroup';
 import {
+    Box,
     FormControl,
     FormLabel,
     FormErrorMessage,
@@ -11,11 +12,10 @@ import {
 
 
 class FormComponent extends Component {
-    
     render() {
         const {fields} = this.props;
         return (
-            <FormControl>
+            <FormControl p="20px" >
                 <Field
                     name={fields.billTotal.name}
                     label={fields.billTotal.label}
@@ -26,6 +26,7 @@ class FormComponent extends Component {
                 />
                 <FormLabel>Select tip %</FormLabel>
                 <RadioGroup name={fields.tipValue.name} options={fields.tipValue.options} onChange={fields.tipValue.onChange} value={fields.tipValue.value} />
+                
                 <Field
                     name={fields.numberPeople.name}
                     label={fields.numberPeople.label}
