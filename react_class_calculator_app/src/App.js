@@ -1,20 +1,20 @@
-import { Container, Row } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Flex, ChakraProvider, Heading } from '@chakra-ui/react';
 import React, { Component } from 'react';
-
-
-import './App.css';
 import CalculatorParent from './components/CalculatorParent';
+import customTheme  from './componentTheme';
+import "@fontsource/space-mono";
 
 class App extends Component {
   render() {
     return (
-      <Container>
-        <h1> SPLITTER</h1>
-        <Row className="d-flex flex-wrap main-content justify-content-between">
+      <ChakraProvider theme={customTheme}>
+        <Container maxW='1200px' h="100vh" pt="150px">
+          <Flex width="full" align="center" justifyContent="center" direction="column">
+          <Heading mb="60px" as="h1" width="75px" fontSize="26px" letterSpacing="0.4px" color="hsl(186, 14%, 43%)" > SPLITTER</Heading>
           <CalculatorParent />
-        </Row>
-      </Container>
+          </Flex>
+        </Container>
+      </ChakraProvider>
     );
   }
 }
