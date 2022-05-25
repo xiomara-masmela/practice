@@ -50,19 +50,7 @@ function FormComponent() {
                 errorMessage: '',
                 validators: [
                     validateNotEmpty,
-                    validateMinLength(8),
-                ]
-            },
-            newPassword: {
-                value: '',
-                type: 'text',
-                name: 'newPassword',
-                placeholder: 'Confirm Password',
-                hasError: false,
-                errorMessage: '',
-                validators: [
-                    validateNotEmpty,
-                    validateMinLength(5),
+                    // validateMinLength(8),
                 ]
             }
         }
@@ -89,15 +77,6 @@ function FormComponent() {
         }
 
         return `${field.placeholder} cannot be empty`
-    }
-
-    // Currying: Like a function that returns another function
-    const validateMinLength = (minLength) => (field) => {
-        if (field.length > minLength) {
-            return '';
-        }
-
-        return `${field.placeholder} must be at least ${minLength} characters long`;
     }
 
     function validateEmailFormat(field) {
