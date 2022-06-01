@@ -24,6 +24,11 @@
   text-align: center;
 }
 
+.tipContainer .radioInput label[data-checked] {
+  background-color: hsl(172, 67%, 45%);
+  color: hsl(183, 100%, 15%);
+}
+
 .tipContainer .custom label {
   padding: 5px;
   cursor: pointer;
@@ -46,4 +51,9 @@
 
 .radioInput span.chakra-radio__control {
   display: none;
+}
+
+.css-1bjwiqd:focus {
+  border-color: hsl(172, 67%, 45%) !important;
+  box-shadow: 0 0 0 2px hsl(172, 67%, 45%) !important;
 }

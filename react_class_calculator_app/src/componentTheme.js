@@ -15,12 +15,14 @@ const overrides = {
     styles: {
         global: {
             body: {
-                bg: "hsl(189, 41%, 97%)",
-                fontFamily: `'Space Mono', monospace`
+                bg: "hsl(185, 41%, 84%)",
+                fontFamily: `'Space Mono', monospace`,
+                fontSize: "14px"
 
             },
             label: {
-                color: "hsl(186, 14%, 43%)"
+                color: "hsl(186, 14%, 43%)",
+                
             }
         }
     },

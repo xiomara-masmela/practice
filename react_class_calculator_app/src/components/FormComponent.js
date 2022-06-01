@@ -8,14 +8,14 @@ import {
     FormLabel,
     FormErrorMessage,
     FormHelperText,
-  } from '@chakra-ui/react'
+} from '@chakra-ui/react'
 
 
 class FormComponent extends Component {
     render() {
-        const {fields} = this.props;
+        const { fields } = this.props;
         return (
-            <FormControl p="20px" >
+            <FormControl mr="25px" >
                 <Field
                     name={fields.billTotal.name}
                     label={fields.billTotal.label}
@@ -24,9 +24,9 @@ class FormComponent extends Component {
                     value={fields.billTotal.value}
                     onChange={fields.billTotal.onChange}
                 />
-                <FormLabel>Select tip %</FormLabel>
+                <FormLabel fontSize="12px" fontWeight="700">Select tip %</FormLabel>
                 <RadioGroup name={fields.tipValue.name} options={fields.tipValue.options} onChange={fields.tipValue.onChange} value={fields.tipValue.value} />
-                
+
                 <Field
                     name={fields.numberPeople.name}
                     label={fields.numberPeople.label}
