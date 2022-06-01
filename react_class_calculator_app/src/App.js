@@ -8,9 +8,9 @@ class App extends Component {
   render() {
     return (
       <ChakraProvider theme={customTheme}>
-        <Container maxW='1200px' h="100vh" pt="150px">
+        <Container maxW='1200px' h="100vh" pt="98px">
           <Flex width="full" align="center" justifyContent="center" direction="column">
-          <Heading mb="60px" as="h1" width="75px" fontSize="26px" letterSpacing="0.4px" color="hsl(186, 14%, 43%)" > SPLITTER</Heading>
+          <Heading mb="46px" as="h1" width="75px" fontSize="26px" letterSpacing="0.4px" color="hsl(186, 14%, 43%)" > SPLITTER</Heading>
           <CalculatorParent />
           </Flex>
         </Container>

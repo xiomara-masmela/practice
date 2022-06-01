@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import React, { Component } from 'react';
 import TotalTip from './TotalTip';
 import FormComponent from './FormComponent';
-import customTheme  from '../componentTheme';
+import customTheme from '../componentTheme';
 
 
 class CalculatorParent extends Component {
@@ -10,14 +10,15 @@ class CalculatorParent extends Component {
     super(props);
 
     // binding funcions before declaring state because
-    // validateNotEmpty and validateEmailFormat are
-    // passed to state
-    // this.validateNotZero = this.validateNotZero.bind(this);
+    // validateNotEmpty is passed to state
+    this.validateNotZero = this.validateNotZero.bind(this);
     // this.validateEmailFormat = this.validateEmailFormat.bind(this);
     // this.validateField = this.validateField.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.isImaginaryNumber = this.isImaginaryNumber.bind(this);
+    this.handleReset = this.handleReset.bind(this);
 
-    this.state = {
+    this.initialState = {
       fields: {
         inputData: {
           billTotal: {
@@ -74,34 +75,36 @@ class CalculatorParent extends Component {
             hasError: false,
             errorMessage: '',
             validation: [
-              // this.validateNotZero,
+              this.validateNotZero
             ]
           }
         },
         calculateData: {
           tipAmount: {
-            value: ""
+            value: 0.00
           },
           total: {
-            value: ""
+            value: 0.00
           }
         }
       }
     };
+
+    this.state = this.initialState;
+  }
+
+  validateNotZero(value) {
+    return value === 0 ? "Can't be zero" : "";
+  }
+
+  isImaginaryNumber(num) {
+    return num === Infinity || isNaN(num);
   }
 
   handleChange(event) {
     event.preventDefault();
-    const billTotal = Number(this.state.fields.inputData.billTotal.value);
-    const tipValue = this.state.fields.inputData.tipValue.value.value;
-    const numberOfPeople = Number(this.state.fields.inputData.numberPeople.value);
-    const totalTipAmount = billTotal * tipValue / numberOfPeople;
-    const totalPayPerson = billTotal / numberOfPeople + totalTipAmount;
-    console.log(this.state.fields.inputData.tipValue.value.value);
-    console.log(billTotal);
-    console.log(numberOfPeople);
 
-    this.setState({
+    const nextState = {
       ...this.state,
       fields: {
         ...this.state.fields,
@@ -112,15 +115,25 @@ class CalculatorParent extends Component {
             value: event.target.value,
           }
         },
-        calculateData : {
-          ...this.state.fields.calculateData,
+      }
+    };
+
+    const billTotal = Number(nextState.fields.inputData.billTotal.value);
+    const tipValue = nextState.fields.inputData.tipValue.value.value;
+    const numberOfPeople = Number(nextState.fields.inputData.numberPeople.value);
+    const totalTipAmount = billTotal * tipValue / numberOfPeople;
+    const totalPayPerson = billTotal / numberOfPeople + totalTipAmount;
+
+    this.setState({
+      ...nextState,
+      fields: {
+        ...nextState.fields,
+        calculateData: {
           tipAmount: {
-            ...this.state.fields.calculateData.tipAmount,
-            value: totalTipAmount
+            value: this.isImaginaryNumber(totalTipAmount) ? "" : totalTipAmount.toFixed(2)
           },
           total: {
-            ...this.state.fields.calculateData.total,
-            value: totalPayPerson
+            value: this.isImaginaryNumber(totalPayPerson) ? "" : totalPayPerson.toFixed(2)
           }
         }
 
@@ -128,15 +141,16 @@ class CalculatorParent extends Component {
     });
 
   }
+
+  handleReset() {
+    this.setState(this.initialState);
+  }
   render() {
-    console.log(this.state)
     return (
-      <Flex bg={customTheme.colors.white} width="800px" borderRadius="10px" padding="30px" >
-            <FormComponent fields={this.state.fields.inputData}  />
-            <TotalTip fields={this.state.fields.calculateData} />
+      <Flex bg={customTheme.colors.white} width="640px" borderRadius="10px" padding="25px 25px 25px 35px" >
+        <FormComponent fields={this.state.fields.inputData} />
+        <TotalTip fields={this.state.fields.calculateData} onReset={this.handleReset} />
       </Flex>
-
-
     );
   }
 }

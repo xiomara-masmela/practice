@@ -4,14 +4,14 @@ import {
   FormLabel,
   Input,
 } from '@chakra-ui/react';
-import customTheme  from '../componentTheme';
+import customTheme from '../componentTheme';
 
 class Field extends Component {
   render() {
     const { name, label, type, placeholder, value, onChange, hasError, errorMessage } = this.props;
     return (
-      <FormControl bg={customTheme.colors.lightGrayCyan}>
-        <FormLabel>{label}</FormLabel>
+      <FormControl bg={customTheme.colors.lightGrayCyan} mb="20px">
+        <FormLabel fontSize="12px" fontWeight="700">{label}</FormLabel>
         <Input
           bg="hsl(189, 41%, 97%)"
           border="none"
