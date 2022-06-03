@@ -1,8 +1,10 @@
-.tipContainer {
+/* .tipContainer {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
 }
+
+
 .tipContainer label, .tipContainer input {
   display: block;
   position: absolute;
@@ -48,6 +50,11 @@
   margin-bottom: 12px;
   
 }
+@media only screen and (max-width: 600px) {
+  .radioInput {
+    width: 110px;
+  }
+}
 
 .radioInput span.chakra-radio__control {
   display: none;
@@ -56,4 +63,4 @@
 .css-1bjwiqd:focus {
   border-color: hsl(172, 67%, 45%) !important;
   box-shadow: 0 0 0 2px hsl(172, 67%, 45%) !important;
-}
+} */
