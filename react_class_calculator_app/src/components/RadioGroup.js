@@ -21,7 +21,7 @@ class RadioGroup extends Component {
                                         name={name}
                                         type="number"
                                         placeholder={option.label}
-                                        value={value.label === 'Custom' ? value * 100 : ""}
+                                        value={value.label === 'Custom' ? value.value * 100 : ""}
                                         onChange={(e) => {
                                             onChange({
                                                 preventDefault: () => { },
@@ -30,6 +30,7 @@ class RadioGroup extends Component {
                                                     value: {
                                                         label: 'Custom',
                                                         value: Number(e.target.value) / 100,
+                                                        
                                                     },
                                                 }
                                             })
@@ -40,6 +41,7 @@ class RadioGroup extends Component {
                         } else {
 
                             const isChecked = option.value === value.value;
+                            console.log(option.value === value.value)
                             
                             return (
                                 <div className="radioInput" key={option.label}>
@@ -52,6 +54,7 @@ class RadioGroup extends Component {
                                                 target: {
                                                     name,
                                                     value: option,
+                                                    checked: {isChecked}
                                                 }
                                             })
                                         }}

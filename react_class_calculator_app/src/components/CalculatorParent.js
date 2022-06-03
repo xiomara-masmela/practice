@@ -43,25 +43,31 @@ class CalculatorParent extends Component {
               {
                 value: 0.05,
                 label: '5%',
+                checked: false
               },
               {
                 value: 0.1,
                 label: '10%',
+                checked: false
               }, {
                 value: 0.15,
                 label: '15%',
+                checked: false
               },
               {
                 value: 0.25,
                 label: '25%',
+                checked: false
               },
               {
                 value: 0.50,
                 label: '50%',
+                checked: false
               },
               {
                 value: 0,
                 label: 'Custom',
+                checked: false
               }
             ]
           },
@@ -71,7 +77,7 @@ class CalculatorParent extends Component {
             type: 'number',
             label: 'Number of People',
             onChange: this.handleChange,
-            placeholder: '0.00',
+            placeholder: '0',
             hasError: false,
             errorMessage: '',
             validation: [
@@ -147,7 +153,7 @@ class CalculatorParent extends Component {
   }
   render() {
     return (
-      <Flex bg={customTheme.colors.white} width="640px" borderRadius="10px" padding="25px 25px 25px 35px" >
+      <Flex bg={customTheme.colors.white} width={['100%', null, '643px']} borderRadius="10px" padding="25px 25px 25px 35px" direction={{ base: 'column', md: 'row' }} >
         <FormComponent fields={this.state.fields.inputData} />
         <TotalTip fields={this.state.fields.calculateData} onReset={this.handleReset} />
       </Flex>
