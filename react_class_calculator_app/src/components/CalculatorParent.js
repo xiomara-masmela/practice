@@ -43,31 +43,25 @@ class CalculatorParent extends Component {
               {
                 value: 0.05,
                 label: '5%',
-                checked: false
               },
               {
                 value: 0.1,
                 label: '10%',
-                checked: false
               }, {
                 value: 0.15,
                 label: '15%',
-                checked: false
               },
               {
                 value: 0.25,
                 label: '25%',
-                checked: false
               },
               {
                 value: 0.50,
                 label: '50%',
-                checked: false
               },
               {
                 value: 0,
                 label: 'Custom',
-                checked: false
               }
             ]
           },
