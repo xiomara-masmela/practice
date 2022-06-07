@@ -8,7 +8,6 @@ import "../App.css";
 class RadioGroup extends Component {
     render() {
         const { name, options, value, onChange } = this.props;
-
         return (
             <div className="tipContainer" >
                 {
@@ -21,7 +20,7 @@ class RadioGroup extends Component {
                                         name={name}
                                         type="number"
                                         placeholder={option.label}
-                                        value={value.label === 'Custom' ? value.value * 100 : ""}
+                                        value={value.label === 'Custom' ? (value.value * 100).toFixed(0) : ""}
                                         onChange={(e) => {
                                             onChange({
                                                 preventDefault: () => { },
@@ -30,7 +29,6 @@ class RadioGroup extends Component {
                                                     value: {
                                                         label: 'Custom',
                                                         value: Number(e.target.value) / 100,
-                                                        
                                                     },
                                                 }
                                             })
@@ -39,22 +37,18 @@ class RadioGroup extends Component {
                                 </div>
                             )
                         } else {
-
                             const isChecked = option.value === value.value;
-                            console.log(option.value === value.value)
-                            
                             return (
                                 <div className="radioInput" key={option.label}>
                                     <Radio key={option.label}
                                         value={option.value}
-                                        checked={isChecked}
+                                        isChecked={value.label !== 'Custom' ? isChecked : false}
                                         onChange={() => {
                                             onChange({
                                                 preventDefault: () => { },
                                                 target: {
                                                     name,
                                                     value: option,
-                                                    checked: {isChecked}
                                                 }
                                             })
                                         }}
